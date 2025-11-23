@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>WebBro</title>
+  <link rel="manifest" href="manifest.json">
+  <style>
+    body { margin:0; font-family:sans-serif; height:100vh; display:flex; flex-direction:column; }
+    
+    /* Title bar */
+    #title-bar {
+      display:flex;
+      justify-content:flex-end;
+      align-items:center;
+      background:#202124;
+      color:white;
+      padding:5px 8px;
+    }
+    #title-bar button {
+      background:transparent;
+      color:white;
+      border:none;
+      font-size:16px;
+      margin-left:8px;
+      cursor:pointer;
+    }
+    #title-bar button:hover { color:#f44336; }
+
+    /* Navigation bar */
+    #bar {
+      background:#202124;
+      color:white;
+      display:flex;
+      align-items:center;
+      padding:6px;
+    }
+    input { flex:1; margin:0 8px; padding:5px; border:none; border-radius:3px; }
+    button.nav { background:#3c4043; color:white; border:none; margin-right:4px; padding:5px 8px; }
+    button.nav:hover { background:#5f6368; }
+
+    /* Tabs */
+    #tabs { display:flex; overflow-x:auto; background:#333; }
+    .tab { padding:5px 10px; cursor:pointer; color:#fff; }
+    .tab.active { background:#555; }
+
+    /* View container */
+    #view-container {
+      flex:1;
+      display:flex;
+      width:100%;
+      background:#fff;
+      overflow:hidden;
+      position:relative;
+    }
+    #view-container iframe {
+      width:100%;
+      height:100%;
+      border:none;
+      flex-shrink:0;
+    }
+  </style>
+</head>
+<body>
+  <!-- Custom title bar with emoji window controls -->
+  <div id="title-bar">
+    <button id="minimize">🗕</button>
+    <button id="maximize">🗖</button>
+    <button id="close">🗙</button>
+  </div>
+
+  <!-- Navigation bar -->
+  <div id="bar">
+    <button class="nav" onclick="nav('back')">⟲</button>
+    <button class="nav" onclick="nav('forward')">⟳</button>
+    <button class="nav" onclick="nav('reload')">↻</button>
+    <input id="url" placeholder="Enter URL" onkeydown="if(event.key==='Enter') openURL()" />
+    <button class="nav" onclick="openURL()">Go</button>
+    <button class="nav" onclick="newTab()">＋</button>
+    <button class="nav" id="settings">⚙️</button>
+  </div>
+
+  <!-- Tabs -->
+  <div id="tabs"></div>
+
+  <!-- Container for web views / iframes -->
+  <div id="view-container"></div>
+
+  <script src="renderer.js"></script>
+  <script>
+    // Register service worker for PWA install
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('service-worker.js')
+        .then(reg => console.log('Service worker registered.', reg))
+        .catch(err => console.log('Service worker registration failed:', err));
+    }
+  </script>
+</body>
+</html>
